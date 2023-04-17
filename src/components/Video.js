@@ -1,3 +1,4 @@
+import PlayButton from "./PlayButton";
 import "./Video.css"
 function Video({id,title,channel,views,time,verified}) {
   return (
@@ -8,6 +9,7 @@ function Video({id,title,channel,views,time,verified}) {
     <div className="title">{title}</div>
     <div className="channel">{channel} {verified && '✅'}</div>
     <div className="views">{views} views <span>.</span>{time}</div>
+    <div><PlayButton onPlay={()=>console.log("Play "+title)} onPause={()=>console.log("Pause "+title)}>{title}</PlayButton></div>
     </div>
   );
 }
