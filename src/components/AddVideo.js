@@ -9,7 +9,8 @@ const AddVideo=({addVideo,updateVideo,editableVideo})=> {
     title:'',
     views:''
   }  
-  const[video,setVideo]=useState(initialState);  
+  const[video,setVideo]=useState(initialState);
+  const [editable,setEditable]=useState({title:'',views:'',id:''});  
   const addVideoHandler=(e)=>{
      e.preventDefault();
      if(editableVideo){
@@ -27,16 +28,16 @@ const AddVideo=({addVideo,updateVideo,editableVideo})=> {
         [e.target.name]:e.target.value
        })
   }
-  useEffect(()=>{
-    if(editableVideo){
-      setVideo(editableVideo);
-    }
-  },[editableVideo])
+  if(editable.id!==editableVideo.id){
+    setVideo(editableVideo);
+    setEditable(editableVideo)
+  }
+  
   return (
     <form>
         <input name="title" type="text" value={video.title} placeholder="title" onChange={handleChange}/>
         <input name="views" type="text" value={video.views} placeholder="views" onChange={handleChange}/>
-        <button onClick={addVideoHandler}>{editableVideo ? 'Edit' :'Add'} Video</button>
+        <button onClick={addVideoHandler}>{editableVideo.id ? 'Edit' :'Add'} Video</button>
     </form>
   )
 }

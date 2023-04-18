@@ -7,7 +7,7 @@ import {useState} from 'react'
 
 function App() {
   const[videos,setVideos]=useState(videoDB);
-  const[editableVideo,setEditableVideo]=useState(null);
+  const[editableVideo,setEditableVideo]=useState({title:'',views:'',id:''});
   function addVideos(video){
     setVideos([
       ...videos,
@@ -19,6 +19,7 @@ function App() {
     const newVideos=[...videos];
     newVideos.splice(index,1,video);
     setVideos(newVideos);
+    setEditableVideo({title:'',views:'',id:''});
   }
   function deleteVideo(id){
    setVideos(videos.filter(video=>video.id!==id))
