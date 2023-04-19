@@ -2,38 +2,57 @@ import './App.css';
 import AddVideo from './components/AddVideo';
 import Counter from './components/Counter';
 import VideoList from './components/VideoList';
+import ThemeContext from './context/ThemeContext';
+import VideosContext from './context/VideosContext';
+import VideosDispatchContext from './context/VideosDispatchContext';
 import videoDB from './data/data';
-import {useState} from 'react'
+import {useState,useReducer,useContext} from 'react'
 
 function App() {
-  const[videos,setVideos]=useState(videoDB);
-  const[editableVideo,setEditableVideo]=useState({title:'',views:'',id:''});
-  function addVideos(video){
-    setVideos([
-      ...videos,
-      {...video,id:videos.length+1}
-    ]);
+  const[editableVideo,setEditableVideo]=useState(null);
+  function videoReducer(videos,action){
+    switch(action.type){
+      case 'ADD':
+        console.log([...videos,
+          {...action.payload,id:videos.length+1}]);
+        return[
+          ...videos,
+          {...action.payload,id:videos.length+1}
+        ]
+      case 'DELETE':
+          return videos.filter(video=>video.id!==action.payload)
+      case 'UPDATE':
+        const index=videos.findIndex(v=>v.id===action.payload.id);
+        const newVideos=[...videos];
+        newVideos.splice(index,1,action.payload);
+        setEditableVideo(null);
+        return newVideos
+         
+      default:
+        return videos  
+    }
   }
-  function updateVideo(video){
-    const index=videos.findIndex(v=>v.id===video.id);
-    const newVideos=[...videos];
-    newVideos.splice(index,1,video);
-    setVideos(newVideos);
-    setEditableVideo({title:'',views:'',id:''});
-  }
+  const themeContext=useContext(ThemeContext);
+  const [videos,dispatch]=useReducer(videoReducer,videoDB);
+ 
   function deleteVideo(id){
-   setVideos(videos.filter(video=>video.id!==id))
+    dispatch({type:'DELETE',payload:id});
   }
   function editVideo(id){
     setEditableVideo(videos.find(video=>video.id===id))
   }
   return (
-    <div className="App">
+    <VideosContext.Provider value={videos}>
+    <VideosDispatchContext.Provider value={dispatch}>
+    <div className={`App ${themeContext}`}>
       <h1>Videos</h1>
-       <VideoList videos={videos} editVideo={editVideo} deleteVideo={deleteVideo} />
-       <AddVideo addVideo={addVideos} editableVideo={editableVideo} updateVideo={updateVideo}/>
+       <VideoList  editVideo={editVideo} deleteVideo={deleteVideo} />
+       <AddVideo  editableVideo={editableVideo}/>
        <Counter/>
     </div>
+    </VideosDispatchContext.Provider>
+    </VideosContext.Provider> 
+   
   );
 }
 

@@ -1,6 +1,7 @@
-import React,{useState,useEffect} from 'react'
+import React,{useState,useEffect,useContext} from 'react'
 import './AddVideo.css'
-const AddVideo=({addVideo,updateVideo,editableVideo})=> {
+import VideosDispatchContext from '../context/VideosDispatchContext';
+const AddVideo=({updateVideo,editableVideo})=> {
   
   const initialState={
     time:'1 month ago',
@@ -10,17 +11,17 @@ const AddVideo=({addVideo,updateVideo,editableVideo})=> {
     views:''
   }  
   const[video,setVideo]=useState(initialState);
-  const [editable,setEditable]=useState({title:'',views:'',id:''});  
+  const dispatch=useContext(VideosDispatchContext);
   const addVideoHandler=(e)=>{
      e.preventDefault();
+    
      if(editableVideo){
-      updateVideo(video);
+      dispatch({type:'UPDATE',payload:video})
      }
      else{
-      addVideo(video);
+      dispatch({type:'ADD',payload:video})
      }
-     
-     setVideo(initialState);
+    setVideo(initialState);
   }  
   const handleChange=(e)=>{
        setVideo({
@@ -28,16 +29,17 @@ const AddVideo=({addVideo,updateVideo,editableVideo})=> {
         [e.target.name]:e.target.value
        })
   }
-  if(editable.id!==editableVideo.id){
-    setVideo(editableVideo);
-    setEditable(editableVideo)
-  }
+  useEffect(()=>{
+    if(editableVideo){
+      setVideo(editableVideo);
+    }
+    },[editableVideo])
   
   return (
     <form>
         <input name="title" type="text" value={video.title} placeholder="title" onChange={handleChange}/>
         <input name="views" type="text" value={video.views} placeholder="views" onChange={handleChange}/>
-        <button onClick={addVideoHandler}>{editableVideo.id ? 'Edit' :'Add'} Video</button>
+        <button onClick={addVideoHandler}>{editableVideo ? 'Edit' :'Add'} Video</button>
     </form>
   )
 }

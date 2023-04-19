@@ -1,10 +1,13 @@
+import VideosDispatchContext from "../context/VideosDispatchContext";
 import PlayButton from "./PlayButton";
 import "./Video.css"
-function Video({id,title,channel,views,time,verified,deleteVideo,editVideo}) {
+import {useContext} from 'react';
+function Video({id,title,channel,views,time,verified,editVideo}) {
+  const dispatch=useContext(VideosDispatchContext);
   return (
     <>
     <div className="container">
-    <button className="close" onClick={()=>deleteVideo(id)}>X</button>
+    <button className="close" onClick={()=>dispatch({type:'DELETE',payload:id})}>X</button>
     <button className="edit" onClick={()=>editVideo(id)}>Edit</button>
     <div className="pic">
       <img src={`https://picsum.photos/id/${id}/160/90`} alt="photoNotAvailable" />

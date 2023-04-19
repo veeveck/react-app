@@ -1,8 +1,10 @@
-import React from 'react'
+import React,{useContext} from 'react'
 import Video from './Video';
+import VideosContext from '../context/VideosContext';
 
 
-function VideoList({videos,deleteVideo,editVideo}) {
+function VideoList({dispatch,editVideo}) {
+  const videos=useContext(VideosContext);
   return (
    <>
     {videos.map((video)=>
@@ -14,8 +16,8 @@ function VideoList({videos,deleteVideo,editVideo}) {
     views={video.views}
     time={video.time}
     verified={video.verified}
-    deleteVideo={deleteVideo}  
     editVideo={editVideo}
+    
     />)}
    </>
   )
