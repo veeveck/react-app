@@ -11,7 +11,7 @@ function Counter() {
     }
   return (
     <>
-        <h1 style={{color:"white"}}>{count}</h1>
+        <h1 style={{color:"blue"}}>{count}</h1>
         <button onClick={handleClick}>Increase</button>
     </>
   )

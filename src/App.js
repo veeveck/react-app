@@ -10,6 +10,7 @@ import {useState,useReducer,useContext} from 'react'
 
 function App() {
   const[editableVideo,setEditableVideo]=useState(null);
+  
   function videoReducer(videos,action){
     switch(action.type){
       case 'ADD':

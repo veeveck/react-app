@@ -1,10 +1,15 @@
 import React,{useContext} from 'react'
 import Video from './Video';
 import VideosContext from '../context/VideosContext';
-
+import axios from 'axios';
 
 function VideoList({dispatch,editVideo}) {
   const videos=useContext(VideosContext);
+  const url ="https://my.api.mockaroo.com/movie.json?key=8d64d850";
+  const clickHandler=()=>{
+    const res= axios.get(url);
+    console.log(res);
+  }
   return (
    <>
     {videos.map((video)=>
@@ -19,6 +24,7 @@ function VideoList({dispatch,editVideo}) {
     editVideo={editVideo}
     
     />)}
+    <button onClick={clickHandler}>Get Video</button>
    </>
   )
 }
